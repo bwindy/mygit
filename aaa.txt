@@ -242,3 +242,23 @@ free_membmp(membmp *mem);
 좋은쌀로 밥짓고   051-248-8500
 남포동 큰집          051-245-3320
 남포동 김해식당 (자갈치역 10번출구)
+
+
+
+
+=================================================================
+
+git hub
+
+
+git init
+
+git  add  aaa.txt
+
+git  commit -m "first"
+
+git  remote add  origin  https://github.com/bwindy/mygit.git
+
+git pull origin master
+
+git push origin master
