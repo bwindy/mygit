@@ -1,0 +1,244 @@
+
+ 
+ typedef struct {
+	uint8_t 			year, mon, day, hour, min;
+//	struct tm			*save_time;
+
+	alarm_struct 		alarm_user_data[6];
+	bubble_struct		bubble_user_data;
+	led_struct		    led_user_data;
+
+	uint8_t			    backwall, font_color, btnstyle, bubble_pwm;
+	uint8_t			    ex_led_list_chk;
+	uint8_t 			led_rgbbr[4];
+	uint32_t			led_mem_color;
+}userData;
+
+
+2. 공통 변수 설정 
+Global 시계(0), struct  tm    timeinfo;
+          배경(0),  char  backwall_loc[50];
+          버튼 이미지(새로 정의해야됨) ?
+           ctrl_image_t  top_time[5];
+           ctrl_image_t  top_back, top_title;
+
+3. 아직 남은 개발건?
+블루투스  버튼 추가해야 되나   --> 김민환 선임  협의후 결정 
+블루투스 speaker 예제 확인 ?
+
+스케줄링 (알람)  LED켜라, 펌프조절 
+
+
+4. user_data.bin    장비 어디에다 저장 ?
+
+저장버튼이 있어야 저장가능한지?  --> 1분마다 갱신되어 저장  5분마다 갱신되어 저장 추천
+변수명 ?
+알람 시간 저장 
+기포기,
+배경화면
+버튼 스타일
+기포기세기
+LED표현 
+
+======================
+알람 저장은 어디서 셋팅하는지?
+common_time_setting()
+======================
+
+user_data_chk
+user_data_init
+user_data_read
+user_data_save  
+
+
+
+추가로 
+alarm_struct
+bubble_struct
+led_struct 
+구현해야 하나,  처음 그래로 적용후  하나씩 걷어내는 식으로 구현하는 것으로 목표로 함
+
+
+5. 기포기 화면 터치 stop할려면 어떻게 하나?
+    analogWrite(pumpPin, pp.pumpStatus * pp.pumpValue);
+    
+       pumpStatus :  0, 1 
+       pumpValue   : 0 ~ 255   
+       값으로  pumpStatus를  0 으로 놓으면 기포기 stop 함 
+
+6. Neopixel 화면 터치 연동 ??
+
+cc:50:e3:aa:be:74
+
+7. MP3 구현 검토  자료 조사
+
+
+
+bluetooth  개발
+
+bt_app_av.h
+bt_app_av.c
+
+bt_app_core.h
+bt_app_core.c
+
+bt_speaker.h
+bt_speaker.c
+
+
+audio_renderer.h
+audio_renderer.c
+
+MerusAudio.h
+MerusAudio.c
+
+audio_player.h
+audio_player.c
+
+common_buffer.h
+common_buffer.c
+common_component.h
+
+
+fifo --->
+spiram_fifo.h
+spiram_fifo.c
+spiram.h
+
+fdk_aac_decoder.h
+fdk_aac_decoder.c
+
+libfaad_decoder.h
+libfaad_decoder.c
+
+mp3_decoder.h
+mp3_decoder.c
+
+aacdecoder_lib.h
+aacdecoder_lib.c
+
+machine_type.h
+
+FDK_audio.h
+genericStds.h
+
+
+#include "$ADF_PATH/components/esp-adf-libs/esp_codec/include/codec/mp3_decoder.h"
+
+#include "/home/hsahn/test/esp-adf/components/esp-adf-libs/esp_codec/include/codec
+
+
+
+		switch (view_index) {
+			case main_index:				main_view();				break;
+
+			case menu_index:				menu_view();				break;
+
+			case voice_index:				mubby_app();				break;
+
+			case led_list_index:			led_list_view();			break;
+			case led_select_index:			led_select_view();			break;
+			case led_control_index:			led_control_view();			break;
+			case led_theme_index:			led_theme_view();			break;
+			case led_timer_index:			led_timer_view();			break;
+
+			case audio_list_index:		audio_list_view();			break;
+//			case audio_list_index:		test_app();		    break;
+			case audio_player_index:		audio_player_view();		    break;
+
+			case pump_list_index:		pump_list_view();			break;
+			case pump_control_index:		pump_control_view();		    break;
+			case pump_timer_index:		pump_timer_view();			break;
+
+//			case alarm_list_index:		alarm_list_view();			break;
+			case alarm_list_index:		i2c_app();			break;
+			case alarm_setting_index:		alarm_setting_view(0);		    break;
+			case alarm_notice_index:		alarm_notice_view(0);		    break;
+
+			case setting_list_index:	setting_list_view();		    break;
+			case setting_backwall_index:	setting_backwall_view();	        break;
+			case setting_btn_index:	setting_btn_view();			break;
+			case setting_as_index:	setting_as_view();			break;
+
+ 
+각 화면 별로 사용되는 view 확인
+
+user_data_chk
+user_data_init        //  create  user_data.bin  file  function  
+user_data_read
+user_data_save
+
+alarm_struct     alarm_user_data[6];
+bubble_struct   bubble_user_data;
+led_struct        led_user_data;
+    
+    MAC: cc:50:e3:aa:be:94
+    
+	time(&now);
+	localtime_r(&now, &timeinfo);
+
+	ESP_LOGI(TAG,"%d-%d-%d / %d:%d:%d", timeinfo.tm_year, timeinfo.tm_mon, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+	
+
+typedef struct {
+	int      			year;
+	uint8_t 			mon, day, hour, min;
+//	struct tm			*save_time;
+
+	alarm_struct 		alarm_user_data[6];
+	bubble_struct		bubble_user_data;
+	led_struct		    led_user_data;
+
+	uint8_t			    backwall_num, font_color, btnstyle, bubble_pwm;
+	uint8_t			    ex_led_list_chk;
+	uint8_t 			led_rgbbr[4];
+	uint32_t			led_mem_color;
+} userData;
+
+    
+ 스케줄링 질문사항
+ 
+ 1. 펌프 시간 예약 및 동작 
+  2. LED 시간 예약 및 동작 
+ 
+알람 동작은 어디서 하는지 ? 
+
+어느 부분에서 예약한 시간에 동작하고 정지하는지 ?
+
+펌프의 동작 세기는 어떻게 하는지 ?  현재 동작모드 예약은 없은 것 같음 
+
+ 수면 모드가 있다고 하는데, 어떻게 하는지
+ 
+LED 동작 모드는 어떻게 하는지  현재 동작모드 예약은 없는 것 같음
+ 
+
+
+
+esp_err_t init_membmpByFile(membmp *mem,const char* path);
+
+esp_err_t free_membmp(membmp *mem);
+
+
+init_membmpByFile(membmp *mem,const char* path);
+
+free_membmp(membmp *mem);
+
+
+반일코스 
+1. 누리마루 APEC 하우스 
+  -> 해운대 해수욕장 
+  -> SEA LIFE 부산 아쿠아리움 
+  -> 해월정 
+2. 태종대 전망대 
+    -> 자갈치마켓 
+    -> BIFF거리 극장들 
+    -> 용두산 공원
+
+해운대
+금수복국 해운대점  051-742-3600
+거북선횟집             051-741-8850
+
+남포동 
+좋은쌀로 밥짓고   051-248-8500
+남포동 큰집          051-245-3320
+남포동 김해식당 (자갈치역 10번출구)
