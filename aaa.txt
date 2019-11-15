@@ -262,3 +262,5 @@ git  remote add  origin  https://github.com/bwindy/mygit.git
 git pull origin master
 
 git push origin master
+
+#추가 수정 
