@@ -1,0 +1,6 @@
+
+
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/ahnhs/work/noisereduction2/lib/x86_64/:/home/ahnhs/work/noisecancel/aec/lib/x86_64/:/home/ahnhs/work/noisecancel/vad/lib/x86_64/
+export LD_LIBRARY_PATH
+
+
